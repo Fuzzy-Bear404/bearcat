@@ -1,0 +1,53 @@
+{% load widget_tweaks %}
+<!DOCTYPE html> 
+<html lang="en">
+<head>
+    <title>Register - Skisenter</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+    <body>
+        <h3 class="text-2xl font-bold pt-4 text-center">Registrer deg</h3>
+        <form method="post" action="" class="max-w-md mx-auto mt-6 p-6 bg-white rounded-2xl border border-gray-200 shadow-lg shadow-cyan-500/50">
+            {% csrf_token %}
+            {% for field in form %}
+                <div class="mb-4">
+                    <label for="{{ field.id_for_label }}" class="block text-sm font-medium text-gray-700">{{ field.label }}</label>
+                    <div class="mt-1">
+                        {{ field|add_class:"w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-yellow-500 focus:ring-yellow-500" }}
+                    </div>
+                </div>
+                {% for error in field.errors %}
+                    <p class="text-red-600 text-sm mt-1">{{ error }}</p>
+                {% endfor %}
+            {% endfor %}
+
+            {% if messages %}
+                <ul>
+                    {% for message in messages %}
+                        <li>{{ message }}</li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+            <div class="flex justify-between">
+                <button type="submit" class="mt-4 rounded-full bg-teal-600 px-5 py-2 text-sm font-semibold text-black shadow-sm hover:bg-teal-500 focus:outline-none focus:ring-2 focus:ring-teal-400 focus:ring-offset-2">
+                    Registrer
+                </button>
+
+                <a href="{% url 'home:login' %}" class="text-black no-underline hover:text-blue-800 pt-5">Logg inn</a>
+
+            </div>
+        </form>
+
+        <div class="flex justify-center p-6">
+            <a class="group relative inline-block focus:ring-3 focus:outline-hidden" href="{% url 'home:index' %}">
+                <span
+                    class="absolute inset-0 translate-x-1.5 translate-y-1.5 bg-teal-600 transition-transform group-hover:translate-x-0 group-hover:translate-y-0"></span>
+                <span
+                    class="relative inline-block border-2 border-current px-8 py-3 text-sm font-bold tracking-widest text-black uppercase"
+                >Home</span>
+            </a>
+        </div>
+
+    </body>
+</html>

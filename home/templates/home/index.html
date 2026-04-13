@@ -1,0 +1,224 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="//unpkg.com/alpinejs" defer></script>
+    <script>{% static "home:index.js" %}</script>
+    <script src="{% static 'home/index.js' %}"></script>
+    <script src="{% static 'home/styles.css' %}"></script>
+    <link rel="icon" href="{% static "home/images/3.ico" %}" type="image/x-icon">
+    <title>{{ page.title }}</title>
+</head>
+    <body class="bg-gray-100 flex justify-center">
+
+        <!-- Top Navigation Bar -->
+        <div class="w-full bg-white shadow-sm p-4 flex justify-between items-center fixed top-0 left-0 z-50">
+            <!-- Left side (optional: site name / logo) -->
+            <div class="text-xl font-mono text-gray-600">
+               {{ user.username }} 
+            </div>
+
+            <!-- Right side: login info -->
+            <div class="w-full bg-white shadow-sm p-4 flex justify-between items-center fixed top-0 left-0 z-50">
+
+                <!-- Username / Logo -->
+                <div class="text-xl font-mono text-gray-600">
+                    {% if user.is_authenticated %}
+                        {{ user.username }}
+                    {% endif %}
+                </div>
+
+                <!-- Right Side -->
+                <div class="flex items-center space-x-4 relative" x-data="{ open: false }">
+
+                    <!-- Avatar Button -->
+                    <button @click="open = !open"
+                            class="flex items-center justify-center w-12 h-12 bg-white rounded-full shadow hover:shadow-md transition">
+                        <img src="{{ user.profile.get_profile_image }}" 
+                            alt="Profile Image"
+                            onerror="this.src='{% static 'home/images/user.png' %}'" 
+                            class="w-full h-full rounded-full object-cover">
+                    </button>
+
+                    <!-- DROPDOWN MENU -->
+                    <div x-show="open"
+                        @click.outside="open=false"
+                        x-transition
+                        class="absolute top-14 right-0 w-48 bg-white rounded-xl shadow-lg border border-gray-200 p-3 z-50">
+
+                        <p class="text-mono text-gray-800 pt-1"></p>
+                        <p class="text-mono text-gray-800 pt-1"></p>
+                        <p class="text-mono text-gray-800 pt-1"></p>
+                        <p class="text-mono text-gray-800 pt-1 pb-2"></p>
+
+                        {% if not user.is_authenticated %}
+                            <!-- LOGIN BUTTON -->
+                            <a href="{% url 'home:login' %}" class="flex items-center space-x-2 text-gray-700 hover:text-teal-600">
+                                <img alt="login">
+                                
+                            </a>
+                        {% else %}
+                            <!-- LOGOUT BUTTON -->
+                            <a href="{% url 'home:logout' %}" class="flex items-center space-x-2 text-gray-700 hover:text-red-600">
+                                <img alt="logout">
+                            
+                            </a>
+                        {% endif %}
+                        
+                        <a href="{% url 'home:settings' %}" class=" hover:text-teal-600 ">
+                            <p class="text-mono text-gray-800 pt-1">
+                                <span style="font-size:1.5rem; vertical-align:middle;"></span>
+                                Settings
+                            </p>
+                        </a>    
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- Add top padding so content doesn't hide behind navbar -->
+        <div class="pt-20"></div>
+
+
+    <main class="flex-1 flex justify-center p-6">
+        <div class="w-full max-w-6xl">
+                <!-- Title -->
+
+            <div class="m-auto flex flex-col items-center px-8 pt-16 pb-24 text-gray-800 md:w-[650px]">
+                <!-- Image and Title on the same line -->
+                <div class="flex items-center space-x-6">
+                    <!-- Image on the left -->
+                    <img
+                        class="object-cover rounded-full h-24 w-24 flex-shrink-0"
+                        src="{% static 'home/images/2.jpg' %}"
+                        alt="nature image"
+                    /> 
+
+                    <!-- Title on the right -->
+                    <h1 class="text-4xl font-bold text-gray-800">
+                        {{ page.title }}
+                    </h1>
+                </div>
+
+                <!-- Subtitle below -->
+                <h2 class="font-title text-2xl text-gray-600 mt-4 text-center">
+                    {{ page.subtitle }}
+                </h2>
+            </div>
+
+            <div class="relative p-4 max-w-xl mx-auto">
+                
+            </div>
+                <div class="h-10 w-full p-4 ">
+                </div> 
+
+                 <!-- Intro text -->
+                <div class="m-auto px-4 text-gray-800 md:w-[775px] md:px-0">
+                    <div class="relative rounded-xl border-4 border-gray-800 bg-white md:text-xl">
+                        <div class="flex flex-col space-y-2 overflow-x-auto px-8 py-6 md:overflow-hidden">
+                            <p class="mt-4 text-gray-700 leading-relaxed text-center">
+                                {{ page.intro_text|linebreaksbr }}
+                            </p>
+                        </div>
+                        <div class="absolute inset-0 flex items-center" style="z-index: -1; margin: 0">
+                            <div class="left-6 -mr-16 h-full w-full translate-x-4 scale-y-95 transform rounded-xl border-4 border-gray-800"></div>
+                        </div>
+                    </div>
+                </div>
+
+
+                <!-- Dropdowns -->
+                <div class="pt-12"> 
+                    <!-- Dropdowns -->
+                    <div x-data="{ openIndex: 0 }" class="pt-12">
+                        <div class="mt-8 text-left">
+                            <div class="flex flex-wrap justify-center gap-3">
+                                {% for dropdown in page.dropdowns.all %}
+                                    <button
+                                        class="rounded-xl px-4 py-2 text-black hover:bg-gray-800 hover:text-white focus:outline-2px focus:ring-4 focus:ring-gray-200"
+                                        @click="openIndex = (openIndex === {{ forloop.counter0 }}) ? null : {{ forloop.counter0 }}"
+                                    >
+                                        {{ dropdown.title }}
+                                    </button>
+                                {% endfor %}
+                            </div>
+
+                            {% for dropdown in page.dropdowns.all %}
+                                <div
+                                    x-show="openIndex === {{ forloop.counter0 }}"
+                                    x-transition
+                                    class="m-auto mt-4 px-4 text-gray-800 md:w-[775px] md:px-0"
+                                >
+                                    <div class="relative rounded-xl border-4 border-gray-800 bg-white md:text-xl">
+                                        <div class="flex flex-col space-y-2 overflow-x-auto px-8 py-6 md:overflow-hidden">
+                                            <p class="mt-4 text-gray-700 leading-relaxed text-center">
+                                                {{ dropdown.content|linebreaksbr }}
+                                            </p>
+                                        </div>
+                                        <div class="absolute inset-0 flex items-center" style="z-index: -1; margin: 0">
+                                            <div class="left-6 -mr-16 h-full w-full translate-x-4 scale-y-95 transform rounded-xl border-4 border-gray-800"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            <!-- END DYNAMIC BLOCK -->
+
+
+            <div class="grid min-h-[140px] w-full place-items-center overflow-x-scroll rounded-lg p-6 lg:overflow-visible">
+           <figure class="relative w-full max-w-md h-32 mx-auto" style="transform: translateX(10px);">
+    <figure class="relative w-full max-w-md h-32 mx-auto pl-9" style="transform: translateX(20px);">
+    <iframe 
+        src="https://tryhackme.com/api/v2/badges/public-profile?userPublicId=6777829"
+        class="w-full h-full border-0">
+    </iframe>
+</figure>
+            </div>
+            
+                <div class="h-25 w-full p-6 "> 
+                    <h2 class="text-lg font-bold text-gray-900 text-center">Cats are Better</h2>
+                    <article class="text-wrap w-50 text-center">
+                        <p class="text-gray-600"> in my opinion cats are better than dogs you cannot change my mind </p>
+                        <p class="text-gray-600"> .-.-.-.-.-.-.-.-.</p>
+                    </article>
+                </div>
+
+            <div class="h-full max-w-5xl mx-auto p-4"> 
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 pt-4">
+                    {% for topic in topics %}
+                        <div class="rounded-2xl border border-gray-200 shadow-md divide-y divide-gray-200">
+                            <div class="p-6">
+                                <h2 class="text-xl font-bold text-gray-900">{{ topic.title }}</h2>
+                                <p class="mt-1 text-gray-600 text-sm">{{ topic.subtitle }}</p>
+                            </div>
+                            <div class="p-6">
+                                <p class="text-gray-700 whitespace-pre-line">
+                                    {{ topic.description }}
+                                </p>
+
+                                {% if topic.drive_link %}
+                                <a href="{{ topic.drive_link }}" target="_blank"
+                                    class="mt-4 inline-block rounded-full bg-blue-600 px-5 py-2 text-sm font-semibold text-white shadow-sm hover:bg-blue-700">
+                                    Åpne Google Drive
+                                </a>
+                                {% endif %}
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>        
+
+        </div> 
+        </div> 
+    </main>         
+    </body>
+</html>
+
+
+

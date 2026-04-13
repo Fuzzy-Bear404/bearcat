@@ -1,0 +1,66 @@
+{% load static %}
+<!DOCTYPE html> 
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="//unpkg.com/alpinejs" defer></script>
+    <link rel="icon" href="{% static 'home/images/3.ico' %}" type="image/x-icon">
+    <title>Delete Account</title>
+</head>
+<body class="bg-gray-50">
+    <div class="min-h-screen flex items-center justify-center p-4">
+        <div class="bg-white rounded-lg shadow-xl p-8 max-w-md w-full">
+            <!-- Warning Icon -->
+            <div class="flex justify-center mb-6">
+                <div class="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center">
+                    <svg class="w-10 h-10 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
+                    </svg>
+                </div>
+            </div>
+
+            <!-- Title -->
+            <h2 class="text-2xl font-bold text-gray-900 text-center mb-4">
+                Delete Account?
+            </h2>
+
+            <!-- Warning Message -->
+            <div class="bg-red-50 border border-red-200 rounded-lg p-4 mb-6">
+                <p class="text-gray-700 text-center mb-2">
+                    <strong>Warning:</strong> This action cannot be undone!
+                </p>
+                <p class="text-gray-600 text-sm text-center">
+                    All your data will be permanently deleted, including your profile, posts, and settings.
+                </p>
+            </div>
+
+            <!-- Confirmation Form -->
+            <form method="POST" action="{% url 'home:delete_account' %}" class="space-y-4">
+                {% csrf_token %}
+                
+                <!-- Buttons -->
+                <div class="flex flex-col space-y-3">
+                    <!-- Delete Button -->
+                    <button type="submit" 
+                            class="w-full bg-red-600 hover:bg-red-700 text-white font-bold py-3 px-4 rounded-lg transition duration-200">
+                        Yes, Delete My Account
+                    </button>
+
+                    <!-- Cancel Button -->
+                    <a href="{% url 'home:settings' %}" 
+                       class="w-full bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-3 px-4 rounded-lg text-center transition duration-200">
+                        Cancel
+                    </a>
+                </div>
+            </form>
+
+            <!-- Additional Info -->
+            <p class="text-xs text-gray-500 text-center mt-6">
+                You are logged in as: <strong>{{ user.username }}</strong>
+            </p>
+        </div>
+    </div>
+</body>
+</html>

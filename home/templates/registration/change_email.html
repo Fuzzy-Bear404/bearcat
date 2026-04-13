@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+{% load widget_tweaks %}
+
+{% block title %}Change Email{% endblock %}
+
+{% block content %}
+    <div class="max-w-lg mx-auto mt-12 p-6 bg-white rounded shadow">
+        <div class="flex justify-center rounded-xl">
+            <h2 class="text-2xl font-semibold mb-4 text-gray-800">Change your email</h2>
+        </div>
+        <form method="post">
+            {% csrf_token %}
+
+            <!-- Password -->
+            <div class="mb-4">
+                {{ form.password.label_tag }}
+                {{ form.password|add_class:"w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm" }}
+                {% if form.password.errors %}
+                    <p class="text-red-600 text-sm">{{ form.password.errors }}</p>
+                {% endif %}
+            </div>
+
+            <!-- Old Email -->
+            <div class="mb-4">
+                {{ form.old_email.label_tag }}
+                {{ form.old_email|add_class:"w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm" }}
+                {% if form.old_email.errors %}
+                    <p class="text-red-600 text-sm">{{ form.old_email.errors }}</p>
+                {% endif %}
+            </div>
+
+            <!-- New Email -->
+            <div class="mb-4">
+                {{ form.new_email.label_tag }}
+                {{ form.new_email|add_class:"w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm" }}
+                {% if form.new_email.errors %}
+                    <p class="text-red-600 text-sm">{{ form.new_email.errors }}</p>
+                {% endif %}
+            </div>
+
+            <!-- Confirm New Email -->
+            <div class="mb-4">
+                {{ form.new_email_confirm.label_tag }}
+                {{ form.new_email_confirm|add_class:"w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm" }}
+                {% if form.new_email_confirm.errors %}
+                    <p class="text-red-600 text-sm">{{ form.new_email_confirm.errors }}</p>
+                {% endif %}
+            </div>
+
+            <!-- Non-field errors (like email mismatch) -->
+            {% if form.non_field_errors %}
+                <div class="mb-4">
+                    <p class="text-red-600 text-sm">{{ form.non_field_errors }}</p>
+                </div>
+            {% endif %}
+
+            <div class="flex justify-center">
+                <button type="submit" class="px-4 py-2 bg-teal-600 text-white rounded-lg hover:bg-teal-700">
+                    Save new email
+                </button>
+            </div>
+        </form>
+    </div>
+{% endblock %}
